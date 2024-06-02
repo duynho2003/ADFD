@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   final String title;
+
   const MyHomePage({super.key, required this.title});
 
   @override
@@ -15,6 +16,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     // ← 1
@@ -31,14 +33,14 @@ class _MyHomePageState extends State<MyHomePage> {
     print('Selected Index: $selectedIndex');
     switch (selectedIndex) {
       case 0:
-      page = GeneratorPage(pair: pair, appState: appState, icon: icon);
+        page = GeneratorPage(pair: pair, appState: appState, icon: icon);
       case 1:
-      page = FavouritePage();
+        page = FavouritePage();
       default:
-      page = Placeholder();
+        page = Placeholder();
     }
 
-      return Scaffold(
+    return Scaffold(
       body: Row(
         children: [
           SafeArea(
@@ -57,10 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             },
           )),
-          Expanded(
-              child: Container(
-                  color: Colors.lightBlue,
-                  child: page)),
+          Expanded(child: Container(color: Colors.lightBlue, child: page)),
         ],
       ),
     );
@@ -78,18 +77,24 @@ class FavouritePage extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('you have ${favorites.length} in your list .'),
+          child: Text('You have ${favorites.length} in your list:'),
         ),
-        for(var pair in favorites)
+        for (var pair in favorites)
           ListTile(
             leading: Icon(Icons.favorite),
             title: Text(pair.asLowerCase),
+            trailing: IconButton(
+              // Add a trailing IconButton
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                appState.removeFavorite(pair);
+              },
+            ),
           ),
       ],
     );
   }
 }
-
 
 class GeneratorPage extends StatelessWidget {
   const GeneratorPage({
@@ -113,7 +118,7 @@ class GeneratorPage extends StatelessWidget {
           BigCard(pair: pair),
           SizedBox(height: 10),
           Row(
-mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.min,
             children: [
               // ElevatedButton(
               //   onPressed: () {

@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Namer App',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 61, 172, 36)),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 33, 110, 143)),
           useMaterial3: true,
         ),
         home: const MyHomePage(title: 'Random Name Idea'),
