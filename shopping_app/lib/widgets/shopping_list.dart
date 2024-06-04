@@ -13,7 +13,7 @@ class ShoppingList extends StatefulWidget {
 
 class _ShoppingListState extends State<ShoppingList> {
   final cartChecked = <Product>{};
-  
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -21,6 +21,15 @@ class _ShoppingListState extends State<ShoppingList> {
           .map((product) => ShoppingListItem(
                 product: product,
                 inCart: cartChecked.contains(product),
+                onTap: (product) {
+                  setState(() {
+                    if (cartChecked.contains(product)) {
+                      cartChecked.remove(product);
+                    } else {
+                      cartChecked.add(product);
+                    }
+                  });
+                },
               ))
           .toList(),
     );

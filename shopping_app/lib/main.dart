@@ -35,7 +35,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var selectedTab = 0; //0: Home 1: Note 3: Settings
+  var selectedTab = 1; //0: Home 1: Note 2: Settings
 
   //Fetch from APIs
   static final listProducts = [
