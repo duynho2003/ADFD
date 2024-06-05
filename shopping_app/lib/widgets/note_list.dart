@@ -15,7 +15,6 @@ class _NoteListState extends State<NoteList> {
   final checkedNotes = <String>{};
 
   var addNoteTextController = TextEditingController();
-
   var convertNoteToItem = (List<String> notes, Set<String> checkedNotes,
       CheckChangedCallback onCheckChanged) {
     return notes
@@ -33,7 +32,7 @@ class _NoteListState extends State<NoteList> {
           return AlertDialog(
             title: Text('Add new'),
             content: SingleChildScrollView(
-                child: ListView(
+                child: ListBody(
               children: [
                 TextField(
                   decoration: InputDecoration(
@@ -106,6 +105,7 @@ class _NoteListState extends State<NoteList> {
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
+                      showaddNoteDialog();
                       print('On add note presseed');
                     },
                     icon: Icon(Icons.add),

@@ -35,7 +35,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var selectedTab = 1; //0: Home 1: Note 2: Settings
+  var selectedTab = 2; //0: Home 1: Note 2: Settings
 
   //Fetch from APIs
   static final listProducts = [
@@ -103,39 +103,53 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: widgetOptions[selectedTab],
-      drawer: ListView(
-        children: [
-          DrawerHeader(
-              decoration: BoxDecoration(color: Colors.amberAccent),
-              child: Text(
-                'Shopping Note',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold),
-              )),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
-            onTap: () {
-              print("Drawer on tap Home");
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.note),
-            title: Text('Note'),
-            onTap: () {
-              print("Drawer on tap note");
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
-            onTap: () {
-              print("Drawer on tap settings");
-            },
-          ),
-        ],
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+                decoration: BoxDecoration(color: Colors.amberAccent),
+                child: Text(
+                  'Shopping Note',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold),
+                )),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: () {
+                print("Drawer on tap Home");
+                setState(() {
+                  selectedTab = 0;
+                });
+                Navigator.of(context).pop;
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.note),
+              title: Text('Note'),
+              onTap: () {
+                print("Drawer on tap note");
+                setState(() {
+                  selectedTab = 1;
+                });
+                Navigator.of(context).pop;
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+              onTap: () {
+                print("Drawer on tap settings");
+                setState(() {
+                  selectedTab = 2;
+                });
+                Navigator.of(context).pop;
+              },
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
@@ -144,7 +158,11 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: "Settings"),
         ],
+        currentIndex: selectedTab,
         onTap: (index) {
+          setState(() {
+            selectedTab = index;
+          });
           print("Bottom navigation bar on Tap index: $index");
         },
       ),
