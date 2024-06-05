@@ -14,6 +14,8 @@ class _NoteListState extends State<NoteList> {
 
   final checkedNotes = <String>{};
 
+  var addNoteTextController = TextEditingController();
+
   var convertNoteToItem = (List<String> notes, Set<String> checkedNotes,
       CheckChangedCallback onCheckChanged) {
     return notes
@@ -23,6 +25,50 @@ class _NoteListState extends State<NoteList> {
             onCheckChanged: onCheckChanged))
         .toList();
   };
+
+  Future showaddNoteDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Add new'),
+            content: SingleChildScrollView(
+                child: ListView(
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8))),
+                  controller: addNoteTextController,
+                ),
+              ],
+            )),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel')),
+              TextButton(
+                  onPressed: () {
+                    handleCreateNewNote();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Create'))
+            ],
+          );
+        });
+  }
+
+  void handleCreateNewNote() {
+    setState(() {
+      var note = addNoteTextController.text;
+      if (note != '') {
+        notes.add(note);
+        searchNotes.add(note);
+      }
+    });
+  }
 
   void handleSearch(String value) {
     setState(() {
