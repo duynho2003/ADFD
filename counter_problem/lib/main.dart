@@ -27,12 +27,13 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => CounterWidget();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class CounterWidget extends State<MyHomePage> {
   int _counter = 0;
   bool _isLoading = false;
+  var message = '';
 
   void _incrementCounter() {
     setState(() {
@@ -56,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               _isLoading
                   ? CircularProgressIndicator()
-                  : Text('message' '$_counter',
+                  : Text('$message : $_counter',
                       style: Theme.of(context).textTheme.headlineMedium),
             ],
           ),
