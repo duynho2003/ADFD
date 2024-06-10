@@ -10,7 +10,7 @@ GoRouter router() {
       builder: (context, state) => LoginScreen()
     ),
     GoRoute(
-      path: '/product', 
+      path: '/products', 
       builder: (context, state) => ProductScreen()
     ),
     GoRoute(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -63,8 +64,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (_formKey.currentState!.validate()) {
                     // Perform login logic here
                     print('Perform login: call login api');
+                    //call api
+                    context.pushReplacement('/products');
                     // ... (Authenticate user, navigate, etc.)
                   } else {
+                    //
                     print('Check validation failed');
                   }
                 },
