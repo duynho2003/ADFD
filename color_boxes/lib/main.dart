@@ -42,10 +42,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var paddingstatefullBoxesWithKey = <Widget>[
     Padding(
+      key: ValueKey('1234512312'),
       padding: const EdgeInsets.all(8.0),
       child: StatefullBox(key: UniqueKey()),
     ), 
     Padding(
+      key: ValueKey('12323'),
       padding: const EdgeInsets.all(8.0),
       child: StatefullBox(
         key: UniqueKey(),
@@ -63,6 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
       
       var box3 = statefullBoxesWithKey.removeAt(0);
       statefullBoxesWithKey.add(box3);
+      
+      var box4 = paddingstatefullBoxesWithKey.removeAt(0);
+      paddingstatefullBoxesWithKey.add(box4);
     });
   }
 
@@ -88,6 +93,12 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.blueGrey,
           ),
           Row(children: statefullBoxesWithKey),
+          Divider(
+            height: 24,
+            thickness: 1.0,
+            color: Colors.blueGrey,
+          ),
+          Row(children: paddingstatefullBoxesWithKey),
           Divider(
             height: 24,
             thickness: 1.0,
