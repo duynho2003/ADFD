@@ -1,0 +1,102 @@
+import 'package:flutter/material.dart';
+import 'package:user_management/database/database_service.dart';
+import 'package:user_management/models/user.dart';
+import 'package:user_management/widgets/user_card.dart';
+
+class UserScreen extends StatefulWidget {
+  const UserScreen({super.key});
+
+  @override
+  State<UserScreen> createState() => _UserScreenState();
+}
+
+class _UserScreenState extends State<UserScreen> {
+  var dbService = DatabaseService();
+  var nameTextController = TextEditingController();
+  var emailTextController = TextEditingController();
+  var ageTextController = TextEditingController();
+
+  void _handleOnCreateUser() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(24, 24, 24, 160),
+              child: Column(
+                children: [
+                  TextField(
+                    decoration: InputDecoration(hintText: 'Name of User'),
+                    controller: nameTextController,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(hintText: 'Name of Email'),
+                    controller: emailTextController,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(hintText: 'Name of Age'),
+                    controller: ageTextController,
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        print('On Create User');
+                        var name = nameTextController.text;
+                        var email = emailTextController.text;
+                        var age = ageTextController.text;
+                        UserModel user = UserModel(
+                            id: UniqueKey().toString(),
+                            name: name,
+                            email: email,
+                            age: int.parse(age));
+                        dbService.insertUser(user);
+                        setState(() {
+                          nameTextController.text ='';
+                          emailTextController.text ='';
+                          ageTextController.text ='';
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Text('Create'))
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('User Management')),
+      body: FutureBuilder(
+        future: dbService.getUser(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasData && snapshot.data != null) {
+            var listUsers = snapshot.data!;
+            if (listUsers.isEmpty) {
+              return Text('User not found, perform add new');
+            } else {
+              return ListView.builder(
+                itemCount: listUsers.length,
+                itemBuilder: (context, index) {
+                return UserCard(item: listUsers[index]);
+              });
+            }
+          } else {
+            return Text('User not found or error occur!');
+          }
+        },
+      ),
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.add),
+        onPressed: _handleOnCreateUser,
+      ),
+    );
+  }
+}
