@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:user_management/database/database_service.dart';
-import 'package:user_management/models/user.dart';
-import 'package:user_management/widgets/user_card.dart';
+
+import '../models/user.dart';
+import '../widgets/user_card.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -49,34 +50,59 @@ class _UserScreenState extends State<UserScreen> {
         });
   }
 
-  void _handleOnCreateUser() {
-    showUserBottomSheet('Create', (){
-    print('On Create User');
-    var name = nameTextController.text;
-    var email = emailTextController.text;
-    var age = ageTextController.text;
-    UserModel user = UserModel(
-        id: UniqueKey().toString(),
-        name: name,
-        email: email,
-        age: int.parse(age));
-    dbService.insertUser(user);
-    setState(() {
-      nameTextController.text = '';
-      emailTextController.text = '';
-      ageTextController.text = '';
+  void _handelOnCreateUser() {
+    showUserBottomSheet('Create', () {
+      print('On Create User');
+      var name = nameTextController.text;
+      var email = emailTextController.text;
+      var age = ageTextController.text;
+      UserModel user = UserModel(
+          id: UniqueKey().toString(),
+          name: name,
+          email: email,
+          age: int.parse(age));
+      dbService.insertUser(user);
+      setState(() {
+        nameTextController.text = '';
+        emailTextController.text = '';
+        ageTextController.text = '';
+      });
+      Navigator.pop(context);
     });
-    Navigator.pop(context);
-  });
+  }
 
-  void _handleOnEditUser(UserModel user) {}
+  void _handleOnEditUser(UserModel user) {
+    nameTextController.text = user.name;
+    emailTextController.text = user.email;
+    ageTextController.text = '${user.age}';
+    showUserBottomSheet('Update', () {
+      print('On Edit User');
+      var name = nameTextController.text;
+      var email = emailTextController.text;
+      var age = ageTextController.text;
+      UserModel userEdit =
+          UserModel(id: user.id, name: name, email: email, age: int.parse(age));
+      dbService.updateUser(userEdit);
+      setState(() {
+        nameTextController.text = '';
+        emailTextController.text = '';
+        ageTextController.text = '';
+      });
+      Navigator.pop(context);
+    });
+  }
+
+  void _handleOnDeleteUser(String id) {
+    dbService.deleteUser(id);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('User Management')),
       body: FutureBuilder(
-        future: dbService.getUser(),
+        future: dbService.getUsers(),
         builder:
             (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -103,7 +129,7 @@ class _UserScreenState extends State<UserScreen> {
       ),
       floatingActionButton: IconButton(
         icon: Icon(Icons.add),
-        onPressed: _handleOnCreateUser,
+        onPressed: _handelOnCreateUser,
       ),
     );
   }

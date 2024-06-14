@@ -68,7 +68,7 @@ class DatabaseService {
   }
 
   //MODEL
-  Future<List<UserModel>> getUser() async {
+  Future<List<UserModel>> getUsers() async {
     Database db = await _databaseService.database;
     var data = await db.query('USERS');
     List<UserModel> users =
@@ -91,8 +91,8 @@ class DatabaseService {
     db.update('USERS', user.toMap(), where: 'id = ?', whereArgs: [user.id]);
   }
 
-  Future<void> deleteUser(UserModel user) async {
+  Future<void> deleteUser(String id) async {
     Database db = await _databaseService.database;
-    db.update('USERS', user.toMap(), where: 'id = ?', whereArgs: [user.id]);
+    db.delete('USERS', where: 'id = ?', whereArgs: [id]);
   }
 }
