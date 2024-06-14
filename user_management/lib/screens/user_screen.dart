@@ -16,7 +16,7 @@ class _UserScreenState extends State<UserScreen> {
   var emailTextController = TextEditingController();
   var ageTextController = TextEditingController();
 
-  void _handleOnCreateUser() {
+  void showUserBottomSheet(String functionName, Function()? onPressed) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -41,31 +41,35 @@ class _UserScreenState extends State<UserScreen> {
                     height: 24,
                   ),
                   ElevatedButton(
-                      onPressed: () {
-                        print('On Create User');
-                        var name = nameTextController.text;
-                        var email = emailTextController.text;
-                        var age = ageTextController.text;
-                        UserModel user = UserModel(
-                            id: UniqueKey().toString(),
-                            name: name,
-                            email: email,
-                            age: int.parse(age));
-                        dbService.insertUser(user);
-                        setState(() {
-                          nameTextController.text ='';
-                          emailTextController.text ='';
-                          ageTextController.text ='';
-                        });
-                        Navigator.pop(context);
-                      },
-                      child: Text('Create'))
+                      onPressed: onPressed, child: Text(functionName))
                 ],
               ),
             ),
           );
         });
   }
+
+  void _handleOnCreateUser() {
+    showUserBottomSheet('Create', (){
+    print('On Create User');
+    var name = nameTextController.text;
+    var email = emailTextController.text;
+    var age = ageTextController.text;
+    UserModel user = UserModel(
+        id: UniqueKey().toString(),
+        name: name,
+        email: email,
+        age: int.parse(age));
+    dbService.insertUser(user);
+    setState(() {
+      nameTextController.text = '';
+      emailTextController.text = '';
+      ageTextController.text = '';
+    });
+    Navigator.pop(context);
+  });
+
+  void _handleOnEditUser(UserModel user) {}
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +87,14 @@ class _UserScreenState extends State<UserScreen> {
               return Text('User not found, perform add new');
             } else {
               return ListView.builder(
-                itemCount: listUsers.length,
-                itemBuilder: (context, index) {
-                return UserCard(item: listUsers[index]);
-              });
+                  itemCount: listUsers.length,
+                  itemBuilder: (context, index) {
+                    return UserCard(
+                      item: listUsers[index],
+                      onItemEdit: _handleOnEditUser,
+                      onItemDelete: _handleOnDeleteUser,
+                    );
+                  });
             }
           } else {
             return Text('User not found or error occur!');

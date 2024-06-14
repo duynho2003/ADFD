@@ -6,7 +6,8 @@ class UserCard extends StatelessWidget {
   final Function(UserModel user)? onItemEdit;
   final Function(String id)? onItemDelete;
 
-  const UserCard({super.key, required this.item, this.onItemEdit, this.onItemDelete});
+  const UserCard(
+      {super.key, required this.item, this.onItemEdit, this.onItemDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +21,17 @@ class UserCard extends StatelessWidget {
             IconButton(
                 onPressed: () {
                   print('Edit User');
+                  if (onItemEdit != null) {
+                    onItemEdit!(item);
+                  }
                 },
                 icon: Icon(Icons.edit)),
             IconButton(
                 onPressed: () {
                   print('Delete User');
+                  if (onItemDelete != null) {
+                    onItemDelete!(item.id);
+                  }
                 },
                 icon: Icon(Icons.delete)),
           ],
