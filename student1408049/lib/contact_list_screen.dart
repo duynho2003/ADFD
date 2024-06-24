@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'laptop_db.dart';
-import 'add_screen.dart';
+import 'contact_db.dart';
+import 'add_contact_screen.dart';
 
 class ContactListScreen extends StatefulWidget {
   @override
@@ -8,53 +8,47 @@ class ContactListScreen extends StatefulWidget {
 }
 
 class _ContactListScreenState extends State<ContactListScreen> {
-  List<Map<String, dynamic>> _laptops = [];
-  List<Map<String, dynamic>> _filteredLaptops = [];
+  List<Map<String, dynamic>> _contacts = [];
+  List<Map<String, dynamic>> _filteredContacts = [];
   TextEditingController _searchController = TextEditingController();
-  final LaptopDB _laptopDB = LaptopDB();
 
   @override
   void initState() {
     super.initState();
-    _loadLaptops();
-    _searchController.addListener(_filterLaptops);
+    _loadContacts();
+    _searchController.addListener(_filterContacts);
   }
 
-  Future<void> _loadLaptops() async {
-    final laptops = await LaptopDB().getLaptops();
+  Future<void> _loadContacts() async {
+    final contacts = await ContactDB().getContacts();
     setState(() {
-      _laptops = laptops;
-      _filteredLaptops = laptops;
+      _contacts = contacts;
+      _filteredContacts = contacts;
     });
   }
 
-  void _deleteLaptop(int id) async {
-    await _laptopDB.deleteLaptop(id);  // Use the instance to call the method
-    _loadLaptops();
-  }
-
-  void _filterLaptops() {
+  void _filterContacts() {
     final query = _searchController.text;
     if (query.isNotEmpty) {
-      final filtered = _laptops.where((contact) {
+      final filtered = _contacts.where((contact) {
         final name = contact['name'] as String;
         return name.toLowerCase().contains(query.toLowerCase());
       }).toList();
       setState(() {
-        _filteredLaptops = filtered;
+        _filteredContacts = filtered;
       });
     } else {
       setState(() {
-        _filteredLaptops = _laptops;
+        _filteredContacts = _contacts;
       });
     }
   }
 
-  void _add() {
+  void _addContact() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddScreen()),
-    ).then((_) => _loadLaptops());
+      MaterialPageRoute(builder: (context) => AddContactScreen()),
+    ).then((_) => _loadContacts());
   }
 
   @override
@@ -67,11 +61,11 @@ class _ContactListScreenState extends State<ContactListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Laptops'),
+        title: Text('Contacts'),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: _add,
+            onPressed: _addContact,
           ),
         ],
       ),
@@ -92,16 +86,11 @@ class _ContactListScreenState extends State<ContactListScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: _filteredLaptops.length,
+              itemCount: _filteredContacts.length,
               itemBuilder: (context, index) {
-                final laptop = _filteredLaptops[index];
                 return ListTile(
-                  title: Text(_filteredLaptops[index]['name']),
-                  subtitle: Text(_filteredLaptops[index]['price']),
-                  trailing: IconButton( // Add delete button
-                    icon: Icon(Icons.delete),
-                    onPressed: () => _deleteLaptop(laptop['id']),
-                  ),
+                  title: Text(_filteredContacts[index]['name']),
+                  subtitle: Text(_filteredContacts[index]['phoneNumber']),
                 );
               },
             ),

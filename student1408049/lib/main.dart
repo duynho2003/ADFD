@@ -1,9 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'contact_list_screen.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() {
   if (kIsWeb) {
