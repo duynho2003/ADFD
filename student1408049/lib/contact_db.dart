@@ -30,8 +30,7 @@ class ContactDB {
       CREATE TABLE contacts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
-        phone TEXT,
-        email TEXT
+        phone TEXT
       )
     ''');
   }

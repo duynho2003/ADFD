@@ -7,18 +7,16 @@ class AddContactScreen extends StatefulWidget {
 }
 
 class _AddContactScreenState extends State<AddContactScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final AlertDialog = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
-  final _emailController = TextEditingController();
 
   Future<void> _saveContact() async {
-    if (_formKey.currentState!.validate()) {
+    if (AlertDialog.currentState!.validate()) {
       try {
         await ContactDB().insertContact({
           'name': _nameController.text,
           'phone': _phoneController.text,
-          'email': _emailController.text,
         });
         Navigator.pop(context);
       } catch (e) {
@@ -31,12 +29,12 @@ class _AddContactScreenState extends State<AddContactScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New Contact'),
+        title: Text('Add new Contact'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
+          key: AlertDialog,
           child: Column(
             children: [
               TextFormField(
@@ -47,7 +45,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
                     return 'Please enter a name';
                   }
                   if (value.length < 5 || value.length > 60) {
-                    return 'Name must be between 2 and 50 characters';
+                    return 'Name must be between 5 and 50 characters';
                   }
                   return null;
                 },
@@ -59,17 +57,6 @@ class _AddContactScreenState extends State<AddContactScreen> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a phone number';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an email';
                   }
                   return null;
                 },

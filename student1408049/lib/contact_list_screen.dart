@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'contact_db.dart';
 import 'add_contact_screen.dart';
@@ -10,13 +12,23 @@ class ContactListScreen extends StatefulWidget {
 class _ContactListScreenState extends State<ContactListScreen> {
   List<Map<String, dynamic>> _contacts = [];
   List<Map<String, dynamic>> _filteredContacts = [];
-  TextEditingController _searchController = TextEditingController();
+
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+
+      if (index == 1) { // Exit button index (assuming 0 is for Home)
+        // Add your exit logic here (e.g., Navigator.pop(context) to go back)
+        Navigator.pop(exit(0)); // Example: Pop this screen to go back
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _loadContacts();
-    _searchController.addListener(_filterContacts);
   }
 
   Future<void> _loadContacts() async {
@@ -27,34 +39,11 @@ class _ContactListScreenState extends State<ContactListScreen> {
     });
   }
 
-  void _filterContacts() {
-    final query = _searchController.text;
-    if (query.isNotEmpty) {
-      final filtered = _contacts.where((contact) {
-        final name = contact['name'] as String;
-        return name.toLowerCase().contains(query.toLowerCase());
-      }).toList();
-      setState(() {
-        _filteredContacts = filtered;
-      });
-    } else {
-      setState(() {
-        _filteredContacts = _contacts;
-      });
-    }
-  }
-
   void _addContact() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AddContactScreen()),
     ).then((_) => _loadContacts());
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
   }
 
   @override
@@ -71,29 +60,30 @@ class _ContactListScreenState extends State<ContactListScreen> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                labelText: 'Search',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: _filteredContacts.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(_filteredContacts[index]['name']),
-                  subtitle: Text(_filteredContacts[index]['phoneNumber']),
+                  subtitle: Text(_filteredContacts[index]['phone']),
                 );
               },
             ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.exit_to_app),
+            label: 'Exit',
           ),
         ],
       ),
