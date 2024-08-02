@@ -6,12 +6,12 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseService {
   final SQL_CREATE_LAPTOPS =
-      'CREATE TABLE LAPTOPS(id TEXT PRIMARY KEY, model TEXT, price TEXT, isThin INTEGER)';
+      'CREATE TABLE LAPTOPS(id TEXT PRIMARY KEY, model TEXT, price TEXT, thin INTEGER)';
   final SQL_SELECT_ALL_LAPTOP = 'SELECT * FROM LAPTOPS';
   final SQL_INSERT_LAPTOP =
-      'INSERT INTO LAPTOPS(id, model, price, isThin) VALUE (?, ?, ?, ?)';
+      'INSERT INTO LAPTOPS(id, model, price, thin) VALUE (?, ?, ?, ?)';
   final SQL_UPDATE_LAPTOP =
-      'UPDATE LAPTOPS SET model = ?, price = ?, isThin = ? WHERE id = ?';
+      'UPDATE LAPTOPS SET model = ?, price = ?, thin = ? WHERE id = ?';
   final SQL_DELETE_LAPTOP = 'DELETE FROM LAPTOPS WHERE id = ?';
 
   static DatabaseService _databaseService = DatabaseService._internal();
@@ -53,12 +53,12 @@ class DatabaseService {
 
   Future<void> inserLaptopRaw(LaptopModel laptop) async {
     Database db = await _databaseService.database;
-    db.rawInsert(SQL_INSERT_LAPTOP, [laptop.id, laptop.model, laptop.price, laptop.isThin]);
+    db.rawInsert(SQL_INSERT_LAPTOP, [laptop.id, laptop.model, laptop.price, laptop.thin]);
   }
 
   Future<void> updateLaptopRaw(LaptopModel laptop) async {
     Database db = await _databaseService.database;
-    db.rawUpdate(SQL_UPDATE_LAPTOP, [laptop.model, laptop.price, laptop.isThin, laptop.id]);
+    db.rawUpdate(SQL_UPDATE_LAPTOP, [laptop.model, laptop.price, laptop.thin, laptop.id]);
   }
 
   Future<void> deleteLaptopRaw(LaptopModel laptop) async {

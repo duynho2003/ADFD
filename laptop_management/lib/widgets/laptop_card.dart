@@ -12,8 +12,8 @@ class LaptopCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text('Model: ${item.model} - Price: ${item.price}'),
-        subtitle: Text('Thin: ${item.isThin}'),
+        title: Text('Model: ${item.model} - Price: \$ ${item.price}'),
+        subtitle: Text('Thin: ${item.thin ? "Yes" : "No"}'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

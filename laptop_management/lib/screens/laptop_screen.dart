@@ -14,7 +14,7 @@ class _LaptopScreenState extends State<LaptopScreen> {
   var dbService = DatabaseService();
   var modelTextController = TextEditingController();
   var priceNumController = TextEditingController();
-  var isThinController = TextEditingController();
+  bool _thin = false;
 
   //hien thi phan khung input
   void showLaptopBottomSheet(String functionName, Function()? onPressed) {
@@ -34,9 +34,18 @@ class _LaptopScreenState extends State<LaptopScreen> {
                     decoration: InputDecoration(hintText: 'Price'),
                     controller: priceNumController,
                   ),
-                  TextField(
-                    decoration: InputDecoration(hintText: 'IsThin'),
-                    controller: isThinController,
+                  Row(
+                    children: [
+                      Text('Thin'),
+                      Switch(
+                        value: _thin,
+                        onChanged: (value) {
+                          setState(() {
+                            _thin = value;
+                          });
+                        },
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 24,
@@ -55,17 +64,17 @@ class _LaptopScreenState extends State<LaptopScreen> {
       print('On Create Laptop');
       var model = modelTextController.text;
       var price = priceNumController.text;
-      var isThin = isThinController.text;
+      var thin = _thin;
       LaptopModel laptop = LaptopModel(
           id: UniqueKey().toString(),
           model: model,
           price: double.parse(price),
-          isThin: int.parse(isThin));
+          thin: thin);
       dbService.insertLaptop(laptop);
       setState(() {
         modelTextController.text = '';
         priceNumController.text = '';
-        isThinController.text = '';
+        thin = false;
       });
       Navigator.pop(context);
     });
